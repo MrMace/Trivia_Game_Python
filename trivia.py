@@ -4,6 +4,16 @@ from PyQt5.QtGui import QPixmap
 from PyQt5 import QtGui, QtCore
 from PyQt5.QtGui import QCursor
 
+widgets = {
+    "logo": [],
+    "button": [],
+    "score": [],
+    "question": [],
+    "answer1": [],
+    "answer2": [],
+    "answer3": [],
+    "answer4": []
+    }
 
 app = QApplication(sys.argv)
 window = QWidget()
@@ -14,28 +24,125 @@ window.setStyleSheet("background: #161219;")
 
 grid = QGridLayout()
 
-#display the logo
-image = QPixmap("logo.png")
-logo = QLabel()
-logo.setPixmap(image)
-logo.setAlignment(QtCore.Qt.AlignCenter)
-logo.setStyleSheet("margin: 100px 0")
+def clear_widgets():
+    for widget in widgets:
+        if widgets[widget] != []:
+            widgets[widget][-1].hide()
+        for i in range(0, len(widgets[widget])):
+            widgets[widget].pop()
 
-#Button Widget
-button = QPushButton("PLAY")
-button.setCursor(QCursor(QtCore.Qt.PointingHandCursor))
-button.setStyleSheet("*{border: 4px solid '#BF40BF';" +
-                     "border-radius: 45px;" +
-                     "font-size:35px;" +
-                     "color: '#fff'; " +
-                     "padding: 25px 0;" +
-                     "margin: 100px 200px;}" +
-                     "*:hover{background: '#BF40BF';}"
-                     ) 
+def show_titleScreen():
+    clear_widgets()
+    titleScreen()
+    
+def start_game():
+    clear_widgets()
+    gameFrame()
+    
 
-grid.addWidget(logo, 0, 0)
-grid.addWidget(button, 1, 0)
+def create_buttons(answer,l_margin,r_margin):
+    button = QPushButton(answer)
+    button.setCursor(QCursor(QtCore.Qt.PointingHandCursor))
+    button.setFixedWidth(485)
+    button.setStyleSheet(
+        #setting variable margins
+        "*{margin-left: " + str(l_margin) +"px;"+
+        "margin-right: " + str(r_margin) +"px;"+
+        '''
+        border: 4px solid '#BF40BF';
+        color: white;
+        font-family: 'shanti';
+        font-size: 16px;
+        border-radius: 25px;
+        padding: 15px 0;
+        margin-top: 20px}
+        *:hover{
+            background: '#BF40BF'
+        }
+        '''
+    )
+    button.clicked.connect(show_titleScreen)
+    return button
 
+def titleScreen():
+    #display the logo
+    image = QPixmap("logo.png")
+    logo = QLabel()
+    logo.setPixmap(image)
+    logo.setAlignment(QtCore.Qt.AlignCenter)
+    logo.setStyleSheet("margin: 100px 0")
+    widgets["logo"].append(logo)
+
+    #Button Widget
+    button = QPushButton("PLAY")
+    button.setCursor(QCursor(QtCore.Qt.PointingHandCursor))
+    button.setStyleSheet("*{border: 4px solid '#BF40BF';" +
+                         "border-radius: 45px;" +
+                         "font-size:35px;" +
+                         "color: '#fff'; " +
+                         "padding: 25px 0;" +
+                         "margin: 100px 200px;}" +
+                         "*:hover{background: '#BF40BF';}"
+                         )
+    button.clicked.connect(start_game)
+    widgets["button"].append(button)
+
+    grid.addWidget(widgets["logo"][-1], 0, 0, 1, 2)
+    grid.addWidget(widgets["button"][-1], 1, 0, 1, 2)
+
+def gameFrame():
+    #score
+    score = QLabel("80")
+    score.setAlignment(QtCore.Qt.AlignRight)
+    score.setStyleSheet("font-size: 35px;" +
+        "color: '#FFF';" +
+        "padding: 15px 10px;" +
+        "margin: 20px 200px;" +
+        "background: '#39ff14';" +
+        "border: 1px solid '#39ff14';" +
+        "border-radius: 35px;"
+        )
+    widgets["score"].append(score)
+    
+    question = QLabel("Placeholder text goes here")
+    question.setAlignment(QtCore.Qt.AlignCenter)
+    question.setWordWrap(True)
+    question.setStyleSheet("font-family: Shanti;" +
+        "font-size: 25px;" +
+        "color: '#FFF';" +
+        "padding: 75px;"
+        )
+    widgets["question"].append(question)
+    
+    button1 = create_buttons("answer1", 85, 5)
+    button2 = create_buttons("answer2", 5, 85)
+    button3 = create_buttons("answer3", 85, 5)
+    button4 = create_buttons("answer4", 5, 85)
+    
+    widgets["answer1"].append(button1)
+    widgets["answer2"].append(button2)
+    widgets["answer3"].append(button3)
+    widgets["answer4"].append(button4)
+    
+    #display the logo
+    image = QPixmap("logo.png")
+    logo = QLabel()
+    logo.setPixmap(image)
+    logo.setAlignment(QtCore.Qt.AlignCenter)
+    logo.setStyleSheet("margin: 75px 0 30px 0")
+    widgets["logo"].append(logo)
+
+    
+    grid.addWidget(widgets["score"][-1], 0, 1)
+    grid.addWidget(widgets["question"][-1], 1, 0, 1, 2)
+    grid.addWidget(widgets["answer1"][-1], 2, 0)
+    grid.addWidget(widgets["answer2"][-1], 2, 1)
+    grid.addWidget(widgets["answer3"][-1], 3, 0)
+    grid.addWidget(widgets["answer4"][-1], 3, 1)
+    grid.addWidget(widgets["logo"][-1], 4, 0, 1, 2)
+    
+titleScreen()
+    
 window.setLayout(grid)
 window.show()
 sys.exit(app.exec())
