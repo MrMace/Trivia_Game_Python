@@ -19,14 +19,18 @@ Installation
 
 1. Clone the repository
 
+```
 git clone https://github.com/MrMace/Trivia_Game_Python.git
 cd Trivia_Game_Python
+```
 
 2. Install dependencies
 
 Make sure you have Python 3 installed. Then install PyQt5:
 
+```
 pip install PyQt5
+```
 
 3. Add the logo image
 
@@ -38,7 +42,9 @@ Usage
 
 Run the game by executing the main Python script:
 
+```
 python main.py
+```
 
 - Click PLAY to start the game.
 - Answer the trivia questions by clicking on the answer buttons.
@@ -59,6 +65,4 @@ Customization & Extension Ideas
 - Update the score dynamically based on correct answers.
 - Add multiple rounds or difficulty levels.
 - Improve styling and animations.
-
----
 
